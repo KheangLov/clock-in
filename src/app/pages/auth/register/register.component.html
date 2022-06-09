@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="d-flex align-items-center justify-content-center vh-100 px-5 mx-md-5">
+    <mat-card class="content-card">
+      <a routerLink="/login" mat-raised-button color="warn" class="w-100 fs-5 fw-bold py-2">
+        Back to Login
+      </a>
+      <div class="d-flex align-items-center justify-content-center py-4">
+        <div class="w-100">
+          <mat-divider></mat-divider>
+        </div>
+        <div class="px-3 pt-1">
+          <h6 class="fw-bold m-0">OR</h6>
+        </div>
+        <div class="w-100">
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" placeholder="Name" formControlName="name" name="name">
+          <mat-error *ngIf="registerFormData.name.hasError('required')">
+            Name is required!
+          </mat-error>
+          <mat-error *ngIf="registerFormData.name.hasError('server')">
+            {{ registerFormData.name.errors?.['server'] }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" placeholder="Email" formControlName="email" name="email">
+          <mat-error *ngIf="registerFormData.email.hasError('required')">
+            Email is required!
+          </mat-error>
+          <mat-error *ngIf="registerFormData.email.hasError('email')">
+            Email is not valid!
+          </mat-error>
+          <mat-error *ngIf="registerFormData.email.hasError('server')">
+            {{ registerFormData.email.errors?.['server'] }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password" name="password">
+          <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerFormData.password.hasError('server')">
+            {{ registerFormData.password.errors?.['server'] }}
+          </mat-error>
+          <mat-error *ngIf="registerFormData.password.hasError('required')">
+            Password is required!
+          </mat-error>
+          <mat-error *ngIf="registerFormData.password.hasError('minlength')">
+            Password need to be equal or greater then 8 length!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Confirmation Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" placeholder="Confirm Password" formControlName="password_confirmation" name="password_confirmation">
+          <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error>
+            <ng-template [ngIf]="registerForm.errors?.['notmatched']">
+              Password not matched!
+            </ng-template>
+            <ng-template [ngIf]="registerFormData.password_confirmation.hasError('required')">
+              Confirm Password is required!
+            </ng-template>
+            <ng-template [ngIf]="!registerForm.errors?.['notmatched'] && registerFormData.password_confirmation.hasError('minlength')">
+              Confirm Password need to be equal or greater then 8 length!
+            </ng-template>
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="w-100 fs-5 fw-bold py-2">
+          Register
+        </button>
+      </form>
+    </mat-card>
+  </div>
+</div>

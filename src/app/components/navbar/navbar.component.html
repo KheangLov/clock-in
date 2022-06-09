@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <div>
+        <span class="me-5 text-uppercase">Clock-IN</span>
+        <a routerLink="/dashboard" mat-button class="text-decoration-none text-white me-3">
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/user" mat-button class="text-decoration-none text-white">
+          <span>User</span>
+        </a>
+      </div>
+      <button (click)="logout()" type="button" mat-button class="text-decoration-none text-white ms-auto">
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,175 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+  <h1 class="text-capitalize">
+    {{ action }} {{ entity }}
+  </h1>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content>
+  <form *ngIf="action === 'create'; else elseBlock;" [formGroup]="form" (ngSubmit)="onSubmit()" class="row">
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Name" formControlName="name" name="name">
+        <mat-error *ngIf="formData.name.hasError('required')">
+          Name is required!
+        </mat-error>
+        <mat-error *ngIf="formData.name.hasError('server')">
+          {{ formData.name.errors?.['server'] }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Email" formControlName="email" name="email">
+        <mat-error *ngIf="formData.email.hasError('required')">
+          Email is required!
+        </mat-error>
+        <mat-error *ngIf="formData.email.hasError('email')">
+          Email is not valid!
+        </mat-error>
+        <mat-error *ngIf="formData.email.hasError('server')">
+          {{ formData.email.errors?.['server'] }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password" name="password">
+        <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="formData.password.hasError('server')">
+          {{ formData.password.errors?.['server'] }}
+        </mat-error>
+        <mat-error *ngIf="formData.password.hasError('required')">
+          Password is required!
+        </mat-error>
+        <mat-error *ngIf="formData.password.hasError('minlength')">
+          Password need to be equal or greater then 8 length!
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Confirmation Password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" placeholder="Confirm Password" formControlName="password_confirmation" name="password_confirmation">
+        <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error>
+          <ng-template [ngIf]="form.errors?.['notmatched']">
+            Password not matched!
+          </ng-template>
+          <ng-template [ngIf]="formData.password_confirmation.hasError('required')">
+            Confirm Password is required!
+          </ng-template>
+          <ng-template [ngIf]="!form.errors?.['notmatched'] && formData.password_confirmation.hasError('minlength')">
+            Confirm Password need to be equal or greater then 8 length!
+          </ng-template>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col text-end">
+      <button mat-raised-button mat-dialog-close color="warn" type="button" class="fw-bold text-capitalize me-2">
+        Close
+      </button>
+      <button mat-raised-button color="primary" class="fw-bold text-capitalize">
+        {{ action }}
+      </button>
+    </div>
+  </form>
+  <ng-template #elseBlock>
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab label="Info">
+        <form [formGroup]="infoForm" (ngSubmit)="onUpdateInfo()">
+          <div class="py-2"></div>
+          <input type="hidden" formControlName="id" name="id" />
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" placeholder="Name" formControlName="name" name="name">
+            <mat-error *ngIf="infoFormData.name.hasError('required')">
+              Name is required!
+            </mat-error>
+            <mat-error *ngIf="infoFormData.name.hasError('server')">
+              {{ infoFormData.name.errors?.['server'] }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" placeholder="Email" formControlName="email" name="email">
+            <mat-error *ngIf="formData.email.hasError('required')">
+              Email is required!
+            </mat-error>
+            <mat-error *ngIf="formData.email.hasError('email')">
+              Email is not valid!
+            </mat-error>
+            <mat-error *ngIf="formData.email.hasError('server')">
+              {{ formData.email.errors?.['server'] }}
+            </mat-error>
+          </mat-form-field>
+          <div class="col text-end">
+            <button mat-raised-button mat-dialog-close color="warn" type="button" class="fw-bold text-capitalize me-2">
+              Close
+            </button>
+            <button mat-raised-button color="primary" class="fw-bold text-capitalize">
+              {{ action }}
+            </button>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Password">
+        <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+          <div class="py-2"></div>
+          <input type="hidden" formControlName="id" name="id" />
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password" name="password">
+            <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+              <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordFormData.password.hasError('server')">
+              {{ passwordFormData.password.errors?.['server'] }}
+            </mat-error>
+            <mat-error *ngIf="passwordFormData.password.hasError('required')">
+              Password is required!
+            </mat-error>
+            <mat-error *ngIf="passwordFormData.password.hasError('minlength')">
+              Password need to be equal or greater then 8 length!
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Confirmation Password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" placeholder="Confirm Password" formControlName="password_confirmation" name="password_confirmation">
+            <button mat-icon-button matSuffix color="link" (click)="hide = !hide" type="button">
+              <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error>
+              <ng-template [ngIf]="passwordForm.errors?.['notmatched']">
+                Password not matched!
+              </ng-template>
+              <ng-template [ngIf]="passwordFormData.password_confirmation.hasError('required')">
+                Confirm Password is required!
+              </ng-template>
+              <ng-template [ngIf]="!passwordForm.errors?.['notmatched'] && passwordFormData.password_confirmation.hasError('minlength')">
+                Confirm Password need to be equal or greater then 8 length!
+              </ng-template>
+            </mat-error>
+          </mat-form-field>
+          <div class="col text-end">
+            <button mat-raised-button mat-dialog-close color="warn" type="button" class="fw-bold text-capitalize me-2">
+              Close
+            </button>
+            <button mat-raised-button color="primary" class="fw-bold text-capitalize">
+              {{ action }}
+            </button>
+          </div>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-template>
+
+</div>
